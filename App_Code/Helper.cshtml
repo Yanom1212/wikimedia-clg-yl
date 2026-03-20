@@ -11,24 +11,39 @@
 }
 @helper SharedMedia(Models.Media media, string type = "Avatar")
 {
-    if (media.isShared)
+    if (media == null) { }
+    else if (media.isShared)
     {
         if (type == "Avatar")
         {
-            <div class="UserMediumAvatar" style="background-image:url('/App_Assets/other/shared.png');" title="Partagé"></div>
+            <div class="UserSmallAvatar"
+                 style="background:url('/App_Assets/other/shared.png');"
+                 title="Partagé"></div>
         }
         else if (type == "Text")
         {
-            <b class="Shared" title="Partagé" style="color: green; font-size: 20px; font-weight: bold;">[Partagé]</b>
+            <b class="Shared" title="Partagé" style="color: green; font-size: 20px; font-weight: bold;">
+                [Partagé]
+            </b>
         }
     }
     else
     {
         if (type == "Text")
         {
-            <b class="Shared" title="Partagé" style="color: darkred; font-size: 20px; font-weight: bold;">[Non-Partagé]</b>
+            <b class="Shared" title="Partagé" style="color: darkred; font-size: 20px; font-weight: bold;">
+                [Non-Partagé]
+            </b>
         }
     }
+}
+@helper LikeButton(string TooltipMessage = "Like")
+{
+    <span type="button"
+          id="like"
+          class="icon fa fa-regular fa-thumbs-up LikeButtonEmpty"
+          title="@TooltipMessage">
+    </span>
 }
 @helper ImageLink(string controller, string action, string imageUrl, string imageClass, string title)
 {
