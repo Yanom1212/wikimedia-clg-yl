@@ -1,28 +1,35 @@
 ﻿@model Models.Media
 
-<dl>
-    <dd>
-        @Model.Title
-    </dd>
-    <dd>
-        @Helper.YoutubePlayer(Model.YoutubeId)
-    </dd>
-    <dd class="description">
-        @Model.Description
-    </dd>
-    <dt>
-        Catégorie
-    </dt>
+<dd>
+    @Model.Title
+</dd>
+<dd>
+    @Helper.YoutubePlayer(Model.YoutubeId)
+</dd>
+<dd class="description">
+    @Model.Description
+</dd>
+<dt>
+    Catégorie
+</dt>
 
-    <dd>
-        @Model.Category
-    </dd>
+<dd>
+    @Model.Category
+</dd>
 
-    <dt>
-        Date de publication
-    </dt>
+<dt>
+    Date de publication
+</dt>
 
-    <dd>
-        @Helper.When(Model.PublishDate)
-    </dd>
-</dl>
+<dd>
+    @Helper.When(Model.PublishDate)
+    État de partage: @(Model.isShared ? "Partager" : "Non-Partager")
+</dd>
+
+<dt>
+    Publier par
+</dt>
+
+<dd>
+    @Helper.AvatarUser(Model.Owner, "UserMediumAvatar")
+</dd>

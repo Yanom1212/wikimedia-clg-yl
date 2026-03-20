@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Models.Media>
+@model IEnumerable<Models.Media>
 
 @if (Model.Count() != 0)
 {
@@ -6,8 +6,9 @@
     {
         <div class="mediaLayout">
             <a href="/Medias/Details/@media.Id" title="Voir les détails de @media.Title" style="text-decoration:none; width:100% !important">
-                <div class="mediaThumbnail" 
-                     style="background-image:url('https://img.youtube.com/vi/@media.YoutubeId/mqdefault.jpg');">
+                <div class="mediaThumbnail" style="background-image:url('https://img.youtube.com/vi/@media.YoutubeId/mqdefault.jpg'); padding:6px; display:flex; flex-flow:row-reverse ">
+                    @Helper.AvatarOwner(media.Owner, "UserSmallAvatar")
+                    @Helper.SharedMedia(media, "UserSmallAvatar")
                 </div>
             </a>
 

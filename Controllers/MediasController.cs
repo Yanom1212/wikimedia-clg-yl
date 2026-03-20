@@ -81,13 +81,22 @@ public class MediasController : Controller
 
                 if (search)
                 {
-                    result = DB.Medias.ToList().Where(c => c.Title.ToLower().Contains(searchString)).OrderBy(c => c.Title);
+                    if (Models.User.ConnectedUser.IsAdmin)
+                        result = DB.Medias.ToList().Where(c => c.Title.ToLower().Contains(searchString)).OrderBy(c => c.Title);
+                    else
+                        result = DB.Medias.ToList().Where(c => c.Title.ToLower().Contains(searchString) && (c.OwnerId == Models.User.ConnectedUser.Id || c.isShared)).OrderBy(c => c.Title);
+
                     string SelectedCategory = (string)Session["SelectedCategory"];
                     if (SelectedCategory != "")
                         result = result.Where(c => c.Category == SelectedCategory);
                 }
                 else
-                    result = DB.Medias.ToList();
+                {
+                    if (Models.User.ConnectedUser.IsAdmin)
+                        result = DB.Medias.ToList();
+                    else
+                        result = DB.Medias.ToList().Where(c => c.OwnerId == Models.User.ConnectedUser.Id || c.isShared);
+                }
                 if ((bool)Session["SortAscending"])
                 {
                     if ((bool)Session["SortByTitle"])
@@ -200,8 +209,9 @@ public class MediasController : Controller
      * that has not been produced by this application*/
     [UserAccess(Models.Access.Write)]
     [ValidateAntiForgeryToken()]
-    public ActionResult Create(Media Media)
+    public ActionResult Create(Media Media, string Partage = "off")
     {
+        Media.isShared = Partage == "on";
         DB.Medias.Add(Media);
         return RedirectToAction("List");
     }
@@ -218,16 +228,19 @@ public class MediasController : Controller
         int id = Session["CurrentMediaId"] != null ? (int)Session["CurrentMediaId"] : 0;
         if (id != 0)
         {
-            Media Media = DB.Medias.Get(id);
-            if (Media != null)
-                return View(Media);
+            if (DB.Medias.Get(id).OwnerId == Models.User.ConnectedUser.Id || Models.User.ConnectedUser.IsAdmin)
+            {
+                Media Media = DB.Medias.Get(id);
+                if (Media != null)
+                    return View(Media);
+            }
         }
         return RedirectToAction("List");
     }
     [UserAccess(Models.Access.Write)]
     [HttpPost]
     [ValidateAntiForgeryToken()]
-    public ActionResult Edit(Media Media)
+    public ActionResult Edit(Media Media, string Partage = "off")
     {
         // Has explained earlier, id of Media is stored server side an not provided in form data
         // passed in the method in order to prever from malicious requests
@@ -238,9 +251,13 @@ public class MediasController : Controller
         Media storedMedia = DB.Medias.Get(id);
         if (storedMedia != null)
         {
-            Media.Id = id; // patch the Id
-            Media.PublishDate = storedMedia.PublishDate; // keep orignal PublishDate
-            DB.Medias.Update(Media);
+            if (DB.Medias.Get(id).OwnerId == Models.User.ConnectedUser.Id || Models.User.ConnectedUser.IsAdmin)
+            {
+                Media.Id = id; // patch the Id
+                Media.PublishDate = storedMedia.PublishDate; // keep orignal PublishDate
+                Media.isShared = Partage == "on";
+                DB.Medias.Update(Media);
+            }
         }
         return RedirectToAction("Details/" + id);
     }
@@ -248,9 +265,12 @@ public class MediasController : Controller
     public ActionResult Delete()
     {
         int id = Session["CurrentMediaId"] != null ? (int)Session["CurrentMediaId"] : 0;
+
+
         if (id != 0)
         {
-            DB.Medias.Delete(id);
+            if(DB.Medias.Get(id).OwnerId == Models.User.ConnectedUser.Id || Models.User.ConnectedUser.IsAdmin)
+                DB.Medias.Delete(id);
         }
         return RedirectToAction("List");
     }

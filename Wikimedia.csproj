@@ -140,6 +140,7 @@
     <Compile Include="WebServices\GeoLocation.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Assets\other\shared.png" />
     <Content Include="App_Assets\Users\5aa8957d-e980-4cac-b915-aaa63d0909f1.jpeg" />
     <Content Include="App_Assets\Users\no_avatar.png" />
     <Content Include="App_Data\iso-3166.txt" />
@@ -201,6 +202,7 @@
     <Content Include="App_Data\RenewPasswordCommands.json" />
     <Content Include="App_Data\UnverifiedEmails.json" />
     <Content Include="App_Data\Users.json" />
+    <Content Include="App_Data\Medias.json" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\_header.cshtml" />
     <Content Include="Views\Medias\About.cshtml" />
@@ -225,6 +227,7 @@
     <Content Include="Views\Accounts\RenewPasswordCommand.cshtml" />
     <Content Include="Views\Accounts\Subscribe.cshtml" />
     <Content Include="Views\Medias\GetDetails.cshtml" />
+    <None Include="Properties\PublishProfiles\Wikimedia-202330851 - Web Deploy.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

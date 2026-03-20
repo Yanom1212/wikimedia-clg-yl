@@ -5,7 +5,18 @@
         <div class="@avatarClass" style="background: url(@user.Avatar)"></div>
         <div class="ellipsis">@user.Name</div>
     </div>
-}@helper ImageLink(string controller, string action, string imageUrl, string imageClass, string title)
+}@helper AvatarOwner(Models.User user, string avatarClass = "UserMediumAvatar")
+{
+    <div class="@avatarClass" style="background: url(@user.Avatar)" title="@user.Name"></div>
+}
+@helper SharedMedia(Models.Media media, string avatarClass = "UserMediumAvatar")
+{
+    if (media.isShared)
+    {
+        <div class="@avatarClass" style="background-image:url('/App_Assets/other/shared.png');" title="Partagé"></div>
+    }
+}
+@helper ImageLink(string controller, string action, string imageUrl, string imageClass, string title)
 {
     var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
     <a href="@Url.Action(action, controller)">

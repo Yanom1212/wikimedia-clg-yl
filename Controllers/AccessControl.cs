@@ -1,4 +1,4 @@
-﻿using Models;
+using Models;
 using System;
 using System.Web;
 using System.Web.Mvc;
@@ -44,5 +44,6 @@ namespace Controllers
                 }
             }
         }
+
     }
 }
