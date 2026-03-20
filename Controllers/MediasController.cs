@@ -165,25 +165,25 @@ public class MediasController : Controller
         return View();
     }
 
-    public ActionResult GetDetails(int id, bool forceRefresh = false)
+    public ActionResult GetDetails(bool forceRefresh = false)
     {
-        try
-        {
-            if (DB.Medias.HasChanged || forceRefresh)
+            try
             {
-                Media media = DB.Medias.Get(id);
-                if (media != null)
+                InitSessionVariables();
+                int mediaId = (int)Session["CurrentMediaId"];
+                Media Media = DB.Medias.Get(mediaId);
+
+                if (DB.Users.HasChanged || DB.Medias.HasChanged || forceRefresh)
                 {
-                    Session["CurrentMediaTitle"] = media.Title;
-                    return PartialView(media);
+                        return PartialView(Media);
                 }
+                return null;
             }
-            return null;
-        }
-        catch (System.Exception ex)
-        {
-            return Content("Erreur interne" + ex.Message, "text/html");
-        }
+            catch (System.Exception ex)
+            {
+                return Content("Erreur interne" + ex.Message, "text/html");
+            }
+
     }
 
     public ActionResult Details(int id)
@@ -192,8 +192,11 @@ public class MediasController : Controller
         Media Media = DB.Medias.Get(id);
         if (Media != null)
         {
-            Session["CurrentMediaTitle"] = Media.Title;
-            return View(Media);
+            if (DB.Medias.Get(id).OwnerId == Models.User.ConnectedUser.Id || DB.Medias.Get(id).isShared || Models.User.ConnectedUser.IsAdmin)
+            {
+                Session["CurrentMediaTitle"] = Media.Title;
+                return View(Media);
+            }
         }
         return RedirectToAction("List");
     }
