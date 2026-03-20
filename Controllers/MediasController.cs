@@ -255,6 +255,7 @@ public class MediasController : Controller
             {
                 Media.Id = id; // patch the Id
                 Media.PublishDate = storedMedia.PublishDate; // keep orignal PublishDate
+                Media.OwnerId = storedMedia.OwnerId; // keep orignal OwnerId
                 Media.isShared = Partage == "on";
                 DB.Medias.Update(Media);
             }
