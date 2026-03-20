@@ -1,7 +1,7 @@
 ﻿@model Models.Media
 
 <dd>
-    @Model.Title
+    @Model.Title - @Helper.SharedMedia(Model, "Text")
 </dd>
 <dd>
     @Helper.YoutubePlayer(Model.YoutubeId)
@@ -23,7 +23,6 @@
 
 <dd>
     @Helper.When(Model.PublishDate)
-    État de partage: @(Model.isShared ? "Partager" : "Non-Partager")
 </dd>
 
 <dt>

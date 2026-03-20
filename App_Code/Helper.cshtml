@@ -9,11 +9,25 @@
 {
     <div class="@avatarClass" style="background: url(@user.Avatar)" title="@user.Name"></div>
 }
-@helper SharedMedia(Models.Media media, string avatarClass = "UserMediumAvatar")
+@helper SharedMedia(Models.Media media, string type = "Avatar")
 {
     if (media.isShared)
     {
-        <div class="@avatarClass" style="background-image:url('/App_Assets/other/shared.png');" title="Partagé"></div>
+        if (type == "Avatar")
+        {
+            <div class="UserMediumAvatar" style="background-image:url('/App_Assets/other/shared.png');" title="Partagé"></div>
+        }
+        else if (type == "Text")
+        {
+            <b class="Shared" title="Partagé" style="color: green; font-size: 20px; font-weight: bold;">[Partagé]</b>
+        }
+    }
+    else
+    {
+        if (type == "Text")
+        {
+            <b class="Shared" title="Partagé" style="color: darkred; font-size: 20px; font-weight: bold;">[Non-Partagé]</b>
+        }
     }
 }
 @helper ImageLink(string controller, string action, string imageUrl, string imageClass, string title)
