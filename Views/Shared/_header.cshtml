@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     string controller = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower();
     string action = HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString().ToLower();
     bool search = Session["Search"] != null ? (bool)Session["Search"] : false;
@@ -14,6 +15,12 @@
     bool userConnected = Models.User.ConnectedUser != null;
     bool userIsAdmin = userConnected ? Models.User.ConnectedUser.IsAdmin : false;
     bool userCanWrite = userConnected ? Models.User.ConnectedUser.CanWrite : false;
+    bool userIsOwner = false;
+    if (currentMediaId != 0)
+    {
+        userIsOwner = DAL.DB.Medias.Get(currentMediaId).OwnerId == Models.User.ConnectedUser.Id;
+    }
+
     string index = RouteConfig.DefaultAction();
 }
 
@@ -118,7 +125,7 @@
                 break;
             case "details":
                 <div id="mainMenuPanel" class="menu">
-                    @if (userCanWrite)
+                    @if (userIsAdmin || userIsOwner)
                     {
                         <a href="/@controller/Edit" class="cmdIcon fa fa-pen-to-square" title="Modifier..."></a>
                         <i class="cmdIcon fa fa-trash-can"
@@ -136,7 +143,9 @@
                 </div>
                 break;
             case "edit":
-                <div id="mainMenuPanel" class="menu">
+
+
+                   <div id="mainMenuPanel" class="menu">
                     <i class="cmdIcon submitCmd fa fa-circle-check" title="Soumettre" onclick="document.getElementById('submit').click()"></i>
                     <a href="/@controller/Details/@currentMediaId" class="cmdIcon fa fa-square-xmark" title="Annuler"></a>
                 </div>
